@@ -1,0 +1,96 @@
+import unittest
+import dv
+from dv import Node
+
+class DVTest(unittest.TestCase):
+
+    def test_from_slides(self):
+        dv.iterations = 0
+        x = Node("x")
+        y = Node("y")
+        z = Node("z")
+        x.add_nbr(y, 4)
+        y.add_nbr(x, 4)
+        x.add_nbr(z, 50)
+        z.add_nbr(x, 50)
+        y.add_nbr(z, 1)
+        z.add_nbr(y, 1)
+        x.start()
+        y.start()
+        z.start()
+        distance = y.D("x")
+        self.assertEqual(distance, 4)
+        #dv.iterations = 0
+        #print("updating")
+        y.update_weight(x, 60)
+        #print(dv.iterations)
+        x.update_weight(y, 60)
+        distance = y.D("x")
+        self.assertEqual(distance, 51)
+
+    def test2_from_slides(self):
+        x = Node("x")
+        y = Node("y")
+        z = Node("z")
+        x.add_nbr(y, 4)
+        y.add_nbr(x, 4)
+        x.add_nbr(z, 50)
+        z.add_nbr(x, 50)
+        y.add_nbr(z, 1)
+        z.add_nbr(y, 1)
+        x.start()
+        y.start()
+        z.start()
+        distance = x.D("z")
+        self.assertEqual(distance, 5)
+        x.update_weight(y, 1)
+        distance = x.D("z")
+        self.assertEqual(distance, 2)
+
+
+    def test_from_slides3(self):
+        x = Node("x")
+        y = Node("y")
+        z = Node("z")
+        x.add_nbr(y, 2)
+        y.add_nbr(x, 2)
+        x.add_nbr(z, 7)
+        z.add_nbr(x, 7)
+        y.add_nbr(z, 1)
+        z.add_nbr(y, 1)
+        x.start()
+        y.start()
+        z.start()
+        distance = x.D("z")
+        self.assertEqual(distance, 3)
+
+    def test3(self):
+        a = Node("a")
+        b = Node("b")
+        c = Node("c")
+        d = Node("d")
+        e = Node("e")
+        a.add_nbr(b, 1)
+        b.add_nbr(a, 1)
+        a.add_nbr(d, 2)
+        d.add_nbr(a, 2)
+        b.add_nbr(c, 2)
+        c.add_nbr(b, 2)
+        d.add_nbr(c, 2)
+        c.add_nbr(d, 2)
+        d.add_nbr(e, 3)
+        e.add_nbr(d, 3)
+        c.add_nbr(e, 8)
+        e.add_nbr(c, 8)
+        a.start()
+        b.start()
+        c.start()
+        d.start()
+        e.start()
+        distance1 = a.D("e")
+        self.assertEqual(distance1, 5)
+        distance2 = a.D("c")
+        self.assertEqual(distance2, 3)
+
+if __name__ == '__main__':
+    unittest.main()
